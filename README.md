@@ -1,12 +1,12 @@
 # Experiment--09-Configuring-UART-in-LPC2148-for-serial-data-transmission-
 
-Name :	
-Roll no 
-Date of experiment :
+Name :	Ishwarya V
+
+Roll no : 212221240016
+
+Date of experiment : 24/11/2022
 
 
-
- Date: 
 ### Configuring UART in LPC2148 for serial data transmission 
 
 ### Aim: 
@@ -14,9 +14,10 @@ To configure internal UART for transferring serial data and display it on the Vi
 Components required: Proteus ISIS professional suite, Kiel μ vision 5 Development environment 
 ### Theory: 
 	The UART Protocol uses only two wires (or pins in a device like microcontroller) to transmit the data. In that, one is for transmitting the data and the pin is called TX pin in the device. The other pin is used to receive the data and is called RX pin.
+
+### FIGURE -01 UART PACKET 
 As UART is a serial communication, the data is transmitted in a series of packets. Usually, a packet consists of 4 parts: a start bit, the actual data, a parity bit and stop bits. The following image shows a typical structure of the data packet in UART.
 ![image](https://user-images.githubusercontent.com/36288975/203727146-383ce4b4-677b-44c3-bb13-a9e203950760.png)
-### FIGURE -01 UART PACKET 
 
 
 ### UART in LPC2148
@@ -44,32 +45,63 @@ UART0 FIFO Control Register (U0FCR): The FIFO Control Register controls the oper
 UART0 Line Control Register (U0LCR): The Line Control Register is used to set the format of the data which is transmitted or received.
 
 
-![image](https://user-images.githubusercontent.com/36288975/203729175-35823e84-cdad-4cd2-8334-2a7477de528f.png)
-
 ## Figure -02 UART interface virtual terminal
 
-### Kiel - Program 
+
+![image](https://user-images.githubusercontent.com/36288975/203729175-35823e84-cdad-4cd2-8334-2a7477de528f.png)
 
 
+### Kiel - Program :
+
+```
+#include<lpc214x.h>
+unsigned char dig[]={0x88,0xeb,0x4c,0x49,0x2b,0x19,0x18,0xcb,0x8,0x9,0xa,0x38,0x9c,0x68,0x1c,0x1e};
+void delay(unsigned int count)
+{
+int j=0,i=0;
+for(j=0;j<count;j++)
+{
+for(i=0;i<120;i++);
+}
+}
+int main(void)
+{
+unsigned char count=0;
+unsigned int i=0;
+IO0DIR|=(1<<11);
+IO0SET=(1<<11);
+IO0DIR|=0x007F8000;
+while(1)
+{
+count++;
+if(count==16)count=0;
+for(i=0;i<400;i++)
+{
+IO0CLR=0x007F8000;
+IO0SET=(dig[count]<<15);
+delay(200);
+}
+}
+}
+```
+
+## Output screen shots :
+
+### Before Simulation :
+
+![output](op.png)
 
 
+### After Simulation :
+
+![output](op1.png)
 
 
+### Circuit Diagram :
 
 
-
-
-
-
-
-
-
-
-
+![output](op2.png)
 
 
 ### Result :
 UART is programmed for transmitting serial data on virtual terminal  
-
-### Output screen shots :
-
